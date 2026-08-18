@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerabilities
+    url: https://github.com/capitine/skinbench/security/advisories/new
+    about: Report suspected vulnerabilities privately. Do not create a public issue.
+  - name: Support and safe reporting
+    url: https://github.com/capitine/skinbench/blob/main/SUPPORT.md
+    about: Read the support and privacy guidance before reporting ordinary problems.

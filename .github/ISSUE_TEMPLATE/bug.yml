@@ -1,0 +1,39 @@
+name: Bug report
+description: Report a reproducible SkinBench problem using a disposable reproduction.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: "Do not attach proprietary rigs, Maya scenes, client data, credentials, logs with private paths, or skin-weight snapshots."
+  - type: input
+    id: version
+    attributes:
+      label: SkinBench version
+      description: Include the version shown by the installed release.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Maya and operating system
+      description: "Example: Maya 2025.3.1 on Windows 11."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Disposable reproduction steps
+      description: Use the smallest neutral polygon mesh and joint setup that shows the problem.
+      placeholder: |
+        1. Start from a disposable scene.
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and observed result
+    validations:
+      required: true

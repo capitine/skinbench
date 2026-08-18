@@ -1,0 +1,23 @@
+name: Feature request
+description: Suggest a focused improvement without sharing project data.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: "Do not attach proprietary rigs, Maya scenes, client data, credentials, logs with private paths, or skin-weight snapshots."
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe the workflow problem with a neutral, disposable example.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Explain the smallest useful change and any safety or compatibility concern.
+    validations:
+      required: true

@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    name: Syntax / Python ${{ matrix.python-version }}
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.7", "3.9", "3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m compileall -q install.py plug-ins scripts
+
+  security:
+    name: Security
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.11"
+      - run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
+      - run: ruff check --select E9,F63,F7,F82 install.py plug-ins scripts tests
+      - run: bandit -r install.py plug-ins scripts -ll
+
+  release-policy:
+    name: Release policy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Check repository policy
+        run: pwsh -NoProfile -File ./tests/release_policy.ps1 -Profile Repository -Root . -RequireScreenshot
+      - name: Build release package
+        run: pwsh -NoProfile -File ./tools/build_release.ps1 -SourceRoot . -OutputDirectory ./dist
+      - name: Check extracted package policy
+        shell: pwsh
+        run: |
+          Expand-Archive -LiteralPath ./dist/SkinBench-1.0.0-beta.1.zip -DestinationPath ./dist/extracted -Force
+          pwsh -NoProfile -File ./tests/release_policy.ps1 -Profile Package -Root ./dist/extracted/SkinBench-1.0.0-beta.1
+      - name: Verify release ZIP checksum
+        shell: pwsh
+        run: |
+          $expected = (Get-Content -LiteralPath ./dist/SkinBench-1.0.0-beta.1.zip.sha256).Split(' ')[0]
+          $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath ./dist/SkinBench-1.0.0-beta.1.zip).Hash
+          if ($actual -cne $expected) { throw "Release ZIP checksum mismatch" }
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: SkinBench-1.0.0-beta.1
+          path: |
+            dist/SkinBench-1.0.0-beta.1.zip
+            dist/SkinBench-1.0.0-beta.1.zip.sha256
+          if-no-files-found: error

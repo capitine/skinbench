@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+*.log
+*.tmp
+.venv-release/
+dist/
+SkinBench-*.zip
+SkinBench-*.zip.sha256

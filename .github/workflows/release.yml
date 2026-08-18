@@ -1,0 +1,49 @@
+name: Draft release
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  release:
+    name: Draft release
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+      artifact-metadata: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Check repository policy
+        run: pwsh -NoProfile -File ./tests/release_policy.ps1 -Profile Repository -Root . -RequireScreenshot
+      - name: Build release package
+        run: pwsh -NoProfile -File ./tools/build_release.ps1 -SourceRoot . -OutputDirectory ./dist
+      - name: Attest release files
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6
+        with:
+          subject-path: |
+            dist/SkinBench-1.0.0-beta.1.zip
+            dist/SkinBench-1.0.0-beta.1.zip.sha256
+      - name: Create draft prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          existing_release_ids="$(gh api --paginate "repos/${GITHUB_REPOSITORY}/releases?per_page=100" --jq '.[] | select(.tag_name == "v1.0.0-beta.1") | .id')"
+          if [ -n "$existing_release_ids" ]; then
+            echo "v1.0.0-beta.1 already exists"
+            exit 1
+          fi
+          gh release create v1.0.0-beta.1 \
+            dist/SkinBench-1.0.0-beta.1.zip \
+            dist/SkinBench-1.0.0-beta.1.zip.sha256 \
+            --draft \
+            --prerelease \
+            --generate-notes \
+            --target "$GITHUB_SHA" \
+            --title "SkinBench 1.0.0-beta.1"
