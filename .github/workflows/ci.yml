@@ -62,7 +62,7 @@ jobs:
           $expected = (Get-Content -LiteralPath ./dist/SkinBench-1.0.0-beta.1.zip.sha256).Split(' ')[0]
           $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath ./dist/SkinBench-1.0.0-beta.1.zip).Hash
           if ($actual -cne $expected) { throw "Release ZIP checksum mismatch" }
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: SkinBench-1.0.0-beta.1
           path: |
