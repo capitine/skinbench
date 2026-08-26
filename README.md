@@ -1,25 +1,43 @@
-# SkinBench
+<p align="center">
+  <img src="docs/images/skinbench-readme-hero.png" alt="SkinBench for Maya: unlock the skin, move or rotate a joint, then lock and zero its rotation" width="100%">
+</p>
 
-Source-only skinning repair tools for Autodesk Maya.
+<p align="center"><strong>Source-only skinning repair tools for Autodesk Maya.</strong></p>
 
-[![Release](https://img.shields.io/github/v/release/capitine/skinbench?include_prereleases&sort=semver)](https://github.com/capitine/skinbench/releases)
-[![CI](https://github.com/capitine/skinbench/actions/workflows/ci.yml/badge.svg)](https://github.com/capitine/skinbench/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/capitine/skinbench/blob/main/LICENSE)
+<p align="center">
+  <a href="https://github.com/capitine/skinbench/releases"><img src="https://img.shields.io/github/v/release/capitine/skinbench?include_prereleases&amp;sort=semver" alt="Release"></a>
+  <a href="https://github.com/capitine/skinbench/actions/workflows/ci.yml"><img src="https://github.com/capitine/skinbench/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/capitine/skinbench/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+</p>
 
-![SkinBench five-tab panel](docs/images/skinbench-overview.png)
+<p align="center">
+  <a href="https://github.com/capitine/skinbench/releases">Releases</a> ·
+  <a href="docs/safety.md">Safety</a> ·
+  <a href="docs/user-guide.md">User Guide</a> ·
+  <a href="docs/compatibility.md">Compatibility</a> ·
+  <a href="https://github.com/capitine/skinbench/issues">Issues</a>
+</p>
 
-[Releases](https://github.com/capitine/skinbench/releases) ·
-[Safety](docs/safety.md) ·
-[User Guide](docs/user-guide.md) ·
-[Compatibility](docs/compatibility.md) ·
-[Issues](https://github.com/capitine/skinbench/issues)
+## Move a skinned joint without moving the mesh
+
+SkinBench's signature workflow lets you adjust a bound rig without detaching
+the skin or making the mesh jump:
+
+1. Click **Unlock joints (mjm ON)**.
+2. Move or rotate the joint with Maya's normal tools. The mesh stays in place.
+3. Click **Lock in (mjm OFF)** to refresh the bind-pose data.
+4. Use **Bake rotate → jointOrient** to return the rotate channels to zero
+   while preserving the joint's world transform.
+
+The controls use Maya's `moveJointsMode` and keep the important state changes
+visible. The complete workflow and recovery notes are in the
+[User Guide](docs/user-guide.md#move-joints-tab).
 
 ## What it does
 
 SkinBench is a dockable five-tab Maya panel for repairing joint placement,
 skin weights, bind data, and reusable poses. It can:
 
-- move skinned joints while holding the mesh still;
 - mirror joints and painted weights;
 - save, apply, and clear poses;
 - snapshot, detach, and reattach skinning;
