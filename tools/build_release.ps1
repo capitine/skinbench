@@ -46,6 +46,7 @@ $packageFiles = @(
     'SUPPORT.md',
     'docs/compatibility.md',
     'docs/development.md',
+    'docs/images/skinbench-readme-hero.png',
     'docs/images/skinbench-overview.png',
     'docs/safety.md',
     'docs/user-guide.md',
